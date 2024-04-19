@@ -1,10 +1,76 @@
-.App {
-  text-align: center;
+.pageWrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #282c34;
+  background-image: url('./static/lennart-butz-ukiyo2.gif');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size:cover;
+  color: whitesmoke;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.inputAndOutputCard {
+  width: 45%;
+  opacity: 85%;
+}
+.responseWrap {
+  display: flex;
+  justify-content: space-evenly;
+  width:85%;
+}
+.card-body {
+  background-color: #282c34;
+  color: white !important;
+}
+.cardInnerDiv {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+.cardLeftDiv {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 40%;
+  min-height: 25vh;
+  align-items: center;
+  border-right: 2px solid darkgray;
+}
+.cardRightDiv {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 40%;
+  align-items: center;
+}
+.cardButtonGroup {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin-top: 2.5%;
+}
+.micDiv {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  border-radius: 50%;
+  height: 80px;
+  width: 80px;
+  border: 1px solid whitesmoke;
+  padding: 10%;
+  margin-bottom: 10%;
+}
+.micDiv :hover {
+  cursor: pointer;
+}
+.micIcon {
+  color: whitesmoke;
+}
+.cancelIcon {
+  color: red;
 }
 
 @media (prefers-reduced-motion: no-preference) {
