@@ -24,7 +24,6 @@ export default function LoadingPage() {
   };
   return (
     <div className='loadingPageWrapper'>
-        <h1>Thinking</h1>
         <div>
         <img src={Servo} alt='a gif of a Samurai' id='loadingGif'/>
             <Typewriter
