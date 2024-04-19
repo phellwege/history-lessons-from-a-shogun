@@ -3,7 +3,6 @@ import './App.css';
 import { Button, Card, Form } from 'react-bootstrap';
 import LoadingPage from './loading/LoadingPage'
 import OpenAI from 'openai';
-
 import { FaMicrophone } from "react-icons/fa";
 import { ImCancelCircle } from "react-icons/im";
 
@@ -14,7 +13,7 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [textInput, setTextInput] = useState('');
   const [gptGeneratedResponse, setGptGeneratedResponse] = useState(null);
-  const [availableText, setAvailableText] = useState('');
+  const [gptGeneratedJapaneseResponse, setGptGeneratedJapaneseResponse] = useState(null);
   const [recording, setRecording] = useState(false);
   let recognition = null;
   const handleListening = () => {
@@ -47,7 +46,8 @@ function App() {
     }
     try {
       setLoading(true);
-      await generateGPTResponse(textInput)
+      await generateGPTResponse(textInput);
+      await generateJapaneseGPTResponse(textInput);
     } catch (error) {
       console.error(error)
     }
@@ -80,6 +80,37 @@ function App() {
     });
     setLoading(false);
     setGptGeneratedResponse(gptResponse.choices[0].message.content);
+    } catch (error) {
+      console.error(error)
+    }
+  };
+  const generateJapaneseGPTResponse = async (textInput) => {
+    try {
+      const gptResponse = await openai.chat.completions.create({
+        model: 'gpt-3.5-turbo',
+        messages: [
+            {
+                role: 'system',
+                content: `
+                Reply to this in japanese as Tokugawa Ieyasu maintain the authoritative, warlike, but respectful tone associated with Tokugawa Ieyasu. Keep your response to a single paragraph.
+                `
+            },
+            {
+                role: 'user',
+                content: `
+                    ${textInput}.
+                `
+            }
+        ],
+        temperature: 0.6,
+        max_tokens: 1000,
+        top_p: 1,
+        frequency_penalty: 0,
+        presence_penalty: 0,
+        stop: "{}",
+    });
+    setLoading(false);
+    setGptGeneratedJapaneseResponse(gptResponse.choices[0].message.content);
     } catch (error) {
       console.error(error)
     }
@@ -131,7 +162,7 @@ function App() {
     });
   };
   const handleTheVoiceOfTokugawaIeyasusJapaneseDownload = () => {
-    if (!gptGeneratedResponse) {
+    if (!gptGeneratedJapaneseResponse) {
       console.error('No generated response to convert to speech');
       return;
     }
@@ -144,7 +175,7 @@ function App() {
       },
       body: JSON.stringify({
         "model_id": "eleven_multilingual_v2",
-        "text": gptGeneratedResponse,
+        "text": gptGeneratedJapaneseResponse,
         "voice_settings": {
           "stability": 0.5,
           "similarity_boost": 0.75,
@@ -221,7 +252,7 @@ function App() {
       });
   };
   const handleTheVoiceOfTokugawaIeyasusJapanese = () => {
-    if (!gptGeneratedResponse) {
+    if (!gptGeneratedJapaneseResponse) {
       console.error('No generated response to convert to speech');
       return;
     }
@@ -234,7 +265,7 @@ function App() {
       },
       body: JSON.stringify({
         "model_id": "eleven_multilingual_v2",
-        "text": gptGeneratedResponse,
+        "text": gptGeneratedJapaneseResponse,
         "voice_settings": {
           "stability": 0.5,
           "similarity_boost": 0.75,
@@ -353,10 +384,10 @@ function App() {
             Japanese Response
           </Card.Header>
           <Card.Body>
-          {gptGeneratedResponse && (
+          {gptGeneratedJapaneseResponse && (
             <>
             <h5>徳川家康</h5>
-            {gptGeneratedResponse}
+            {gptGeneratedJapaneseResponse}
             <br/>
             <div className='cardButtonGroup'>
               <Button onClick={handleTheVoiceOfTokugawaIeyasusJapanese}>
